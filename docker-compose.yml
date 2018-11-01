@@ -1,0 +1,70 @@
+version: "3"
+services:
+
+  ui_stack_db:
+    # image: postgres:10.2-alpine
+    image: mdillon/postgis:10-alpine
+    # PostgreSQL access
+    # ports:
+    #   - 5432
+    volumes:
+      - ${PWD}/dbinit:/docker-entrypoint-initdb.d
+      - ui_stack_db_volume:/var/lib/postgresql/data
+      - ${PWD}/postgres-entrypoint.sh:/docker-entrypoint.sh
+    environment:
+      POSTGRES_USER: summa
+      POSTGRES_DB: summa
+      POSTGRES_PASSWORD: summa-project
+
+  ui_stack_updatedb:
+    build:
+      context: ./updatedb
+    depends_on:
+      - ui_stack_db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+
+  ui_stack_pull:
+    build:
+      context: ./pull
+    # Point pull script to data source by setting "command" in docker-compose.override.yml like below.
+    # The first URL should point to the API, the second URL is optional - should point to video API if videos are not forwarded by the general API.
+    # command: default=https://ui.summa.leta.lv/v1/api/,https://ui.summa.leta.lv/v1/api/
+    depends_on:
+      - ui_stack_db
+
+  ui_stack_clustering:
+    build:
+      context: ./clustering
+    volumes:
+      - ui_stack_clustering_data_volume:/pba/clustering/standalone/:rw
+    depends_on:
+      - ui_stack_db
+
+  ui_stack_summarization:
+    build:
+      context: ./summarization
+    depends_on:
+      - ui_stack_db
+
+  ui_stack_geolocation:
+    build:
+      context: ./geolocation
+    depends_on:
+      - ui_stack_db
+
+  ui_stack:
+    build:
+      context: .
+    depends_on:
+      - ui_stack_db
+    ports:
+      - 9000
+
+volumes:
+  ui_stack_db_volume:
+  ui_stack_clustering_data_volume:

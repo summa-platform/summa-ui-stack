@@ -1,0 +1,13 @@
+static_path: static
+login_static_path: static/login
+port: 9000
+db:
+    user: summa
+    password: summa-project
+    port: 5432
+    host: ui_stack_db
+    dbname: summa
+    app_name: summa-ui-stack
+    pool_max_connections: 5
+    reconnect_sleep: 10
+external_users_api: http://db_rest_endpoint/users

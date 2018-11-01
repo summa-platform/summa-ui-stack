@@ -1,0 +1,11 @@
+db:
+    user: summa
+    password: summa-project
+    port: 5432
+    host: ui_stack_db
+    dbname: summa
+    app_name: summa-ui-stack-clustering
+    pool_max_connections: 5
+    reconnect_sleep: 10
+clustering_api: http://localhost:5000/clustering
+clustering_control_api: http://localhost:5001/reset

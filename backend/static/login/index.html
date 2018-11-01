@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<script src="jquery-3.2.1.js"></script>
+	<link href="bootstrap.min.css" rel="stylesheet">
+	<link href="login.css" rel="stylesheet">
+</head>
+<body>
+	<form id="login-form" method="POST" action="/api/auth">
+		SUMMA PLATFORM
+		<!-- <input class="form-control" type="text" name="username" placeholder="Username" /> -->
+		<input class="form-control" type="text" name="email" placeholder="E-mail" />
+		<input class="form-control" type="password" name="password" placeholder="Password" />
+		<input id="r" name="r" type="hidden" />
+		<button class="btn btn-primary" type="submit">Login</button>
+		<span class="error" id="error"></span>
+	</form>
+	<script>
+		let queryString = location.search.replace('?', '').split('&');
+		let queryParams = {};
+		for (let i = 0; i < queryString.length; i++) {
+			let name = queryString[i].split('=')[0];
+			let value = queryString[i].split('=')[1];
+			queryParams[name] = value;
+		}
+		if(queryParams.status == 'fail') {
+			let errorElement = document.getElementById("error");
+			errorElement.innerHTML = 'Invalid user or password';
+			// let div = document.createElement('div');
+			// div.innerHTML = 'Login error, invalid user or password';
+			// document.body.appendChild(div);
+		}
+		let loginForm = document.getElementById("login-form");
+		if(queryParams.r) {
+			document.getElementById("r").value = queryParams.r;
+		}
+		loginForm.action += location.hash;
+	</script>
+</body>
+</html>

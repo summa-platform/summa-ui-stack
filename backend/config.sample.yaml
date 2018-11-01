@@ -1,0 +1,14 @@
+static_path: static
+login_static_path: static/login
+port: 9000
+debug: false
+db:
+    user: dbuser
+    password: dbpassword
+    port: 5432
+    host: localhost
+    dbname: dbname
+    app_name: summa-ui
+    pool_max_connections: 5
+    reconnect_sleep: 10
+# external_users_api: https://ui.summa.leta.lv/v1/api/users
