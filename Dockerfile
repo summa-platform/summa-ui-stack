@@ -1,9 +1,11 @@
-FROM node:8 as frontend-prebuild
+FROM node:10 as frontend-prebuild
 RUN npm install -g aurelia-cli yarn
 WORKDIR /src
 COPY frontend/package.json /src/package.json
+COPY frontend/package-lock.json /src/package-lock.json
 COPY frontend/yarn.lock /src/yarn.lock
-RUN yarn
+# RUN yarn
+RUN npm install
 
 
 FROM frontend-prebuild as frontend-build
